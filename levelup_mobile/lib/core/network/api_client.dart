@@ -5,7 +5,9 @@ import '../storage/token_storage.dart';
 
 class ApiClient {
   final Dio dio;
-  ApiClient._(this.dio);
+  final TokenStorage tokenStorage;
+
+  ApiClient._(this.dio, this.tokenStorage);
 
   static Future<ApiClient> create(TokenStorage tokenStorage) async {
     final dio = Dio(
@@ -23,12 +25,14 @@ class ApiClient {
           final token = await tokenStorage.readAccessToken();
           if (token != null && token.isNotEmpty) {
             options.headers['Authorization'] = 'Bearer $token';
+          } else {
+            options.headers.remove('Authorization');
           }
           handler.next(options);
         },
       ),
     );
 
-    return ApiClient._(dio);
+    return ApiClient._(dio, tokenStorage);
   }
 }

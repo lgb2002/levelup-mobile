@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import 'features/home/home_page.dart';
+import 'features/auth/login_page.dart';
 
 class LevelUpApp extends StatelessWidget {
   LevelUpApp({super.key});
@@ -9,7 +10,7 @@ class LevelUpApp extends StatelessWidget {
   final GoRouter _router = GoRouter(
     routes: [
       GoRoute(path: '/', builder: (context, state) => const HomePage()),
-      // TODO: /login, /report 등은 다음 단계에서 추가
+      GoRoute(path: '/login', builder: (context, state) => const LoginPage()),
     ],
   );
 
