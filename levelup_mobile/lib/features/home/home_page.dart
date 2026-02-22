@@ -19,16 +19,14 @@ class HomePage extends ConsumerWidget {
         actions: [
           if (auth is AuthLoggedIn)
             TextButton(
-              onPressed: () async {
-                await ref.read(authControllerProvider.notifier).logout();
-              },
+              onPressed: () => ref.read(authControllerProvider.notifier).logout(),
               child: const Text('Logout'),
             )
           else if (auth is AuthAnonymous)
             TextButton(
               onPressed: () => context.push('/login'),
               child: const Text('Login'),
-            )
+            ),
         ],
       ),
       body: Padding(
@@ -38,7 +36,9 @@ class HomePage extends ConsumerWidget {
             Align(
               alignment: Alignment.centerLeft,
               child: Text(
-                auth is AuthLoggedIn ? 'Status: Logged in' : 'Status: Anonymous',
+                auth is AuthLoggedIn
+                    ? 'Logged in: ${auth.user.nickname} (${auth.user.email})'
+                    : 'Anonymous',
                 style: const TextStyle(fontSize: 12, color: Colors.grey),
               ),
             ),
@@ -50,23 +50,15 @@ class HomePage extends ConsumerWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        '오늘 XP: ${s.todayXp}',
-                        style: const TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
+                      Text('오늘 XP: ${s.todayXp}',
+                          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
                       const SizedBox(height: 8),
                       Text('레벨: ${s.level} / 주간 점수: ${s.weekPoints}'),
                       Text('검수 대기: ${s.pendingReviewsCount}'),
-                      if (s.nextActionTitle != null)
-                        Text('다음 추천: ${s.nextActionTitle}'),
+                      if (s.nextActionTitle != null) Text('다음 추천: ${s.nextActionTitle}'),
                       const SizedBox(height: 8),
-                      Text(
-                        '업데이트: ${s.lastUpdated}',
-                        style: const TextStyle(fontSize: 12, color: Colors.grey),
-                      ),
+                      Text('업데이트: ${s.lastUpdated}',
+                          style: const TextStyle(fontSize: 12, color: Colors.grey)),
                     ],
                   ),
                 ),
@@ -74,15 +66,12 @@ class HomePage extends ConsumerWidget {
               loading: () => const LinearProgressIndicator(),
               error: (e, _) => Text('요약 로드 실패: $e'),
             ),
-            const SizedBox(height: 16),
 
-            // Quick Add는 로그인 다음 단계에서 고칠 거라 일단 유지
+            // Quick Add는 다음 단계에서 백엔드 붙이면 됨 (지금은 실패해도 OK)
+            const SizedBox(height: 16),
             Align(
               alignment: Alignment.centerLeft,
-              child: Text(
-                'Quick Add (현재 백엔드 연동 예정)',
-                style: Theme.of(context).textTheme.titleMedium,
-              ),
+              child: Text('Quick Add', style: Theme.of(context).textTheme.titleMedium),
             ),
             const SizedBox(height: 8),
             Wrap(
@@ -100,12 +89,7 @@ class HomePage extends ConsumerWidget {
     );
   }
 
-  Widget _quickAddButton(
-    BuildContext context,
-    WidgetRef ref,
-    String label,
-    String code,
-  ) {
+  Widget _quickAddButton(BuildContext context, WidgetRef ref, String label, String code) {
     return ElevatedButton(
       onPressed: () async {
         try {
@@ -113,15 +97,11 @@ class HomePage extends ConsumerWidget {
           await svc.quickAdd(code);
           ref.invalidate(widgetSummaryProvider);
           if (context.mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('$label 기록됨')),
-            );
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('$label 기록됨')));
           }
         } catch (e) {
           if (context.mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('기록 실패: $e')),
-            );
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('기록 실패: $e')));
           }
         }
       },

@@ -33,7 +33,8 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       await ref
           .read(authControllerProvider.notifier)
           .login(_emailCtrl.text.trim(), _pwCtrl.text);
-      if (mounted) Navigator.of(context).pop(); // 홈으로 복귀
+
+      if (mounted) Navigator.of(context).pop();
     } catch (e) {
       setState(() => _error = e.toString());
     } finally {
@@ -43,16 +44,12 @@ class _LoginPageState extends ConsumerState<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    final auth = ref.watch(authControllerProvider);
-
     return Scaffold(
       appBar: AppBar(title: const Text('Login')),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
-            if (auth is AuthLoggedIn)
-              const Text('Already logged in. Go back.'),
             TextField(
               controller: _emailCtrl,
               decoration: const InputDecoration(labelText: 'Email'),
