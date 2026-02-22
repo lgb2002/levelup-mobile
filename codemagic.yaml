@@ -1,0 +1,14 @@
+workflows:
+  android-dev:
+    name: Android Dev (APK)
+    environment:
+      vars:
+        BASE_URL: https://ec13b65c-859e-4470-9cb4-acc505067069-00-38csd3xhvdoy4.kirk.replit.dev
+      flutter: stable
+    scripts:
+      - flutter pub get
+      - flutter analyze
+      - flutter test || true
+      - flutter build apk --debug --dart-define=BASE_URL=${BASE_URL}
+    artifacts:
+      - build/app/outputs/flutter-apk/app-debug.apk
