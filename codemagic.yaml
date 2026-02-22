@@ -6,9 +6,10 @@ workflows:
         BASE_URL: https://ec13b65c-859e-4470-9cb4-acc505067069-00-38csd3xhvdoy4.kirk.replit.dev
       flutter: stable
     scripts:
-      - flutter pub get
-      - flutter analyze
-      - flutter test || true
-      - flutter build apk --debug --dart-define=BASE_URL=${BASE_URL}
+      - cd levelup_mobile && pwd && ls -la
+      - cd levelup_mobile && flutter pub get
+      - cd levelup_mobile && flutter analyze
+      - cd levelup_mobile && flutter test || true
+      - cd levelup_mobile && flutter build apk --debug --dart-define=BASE_URL=${BASE_URL}
     artifacts:
       - levelup_mobile/build/app/outputs/flutter-apk/app-debug.apk
