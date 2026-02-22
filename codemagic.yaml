@@ -6,7 +6,6 @@ workflows:
         BASE_URL: https://ec13b65c-859e-4470-9cb4-acc505067069-00-38csd3xhvdoy4.kirk.replit.dev
       flutter: stable
     scripts:
-      - cd levelup_mobile
       - flutter pub get
       - flutter analyze
       - flutter test || true
